@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">Bun venit, {{ user.username }}!</h2>
+                <p class="text-muted">Iată un rezumat al finanțelor tale personale</p>
+
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3><i class="bi bi-cash"></i></h3>
+                                <h5>Venituri Totale</h5>
+                                <h3>{{ total_income|floatformat:2 }} RON</h3>
+                                <small>Luna curentă</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h3><i class="bi bi-credit-card"></i></h3>
+                                <h5>Cheltuieli Totale</h5>
+                                <h3>{{ total_expenses|floatformat:2 }} RON</h3>
+                                <small>Luna curentă</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3><i class="bi bi-piggy-bank"></i></h3>
+                                <h5>Economii</h5>
+                                <h3>{{ total_savings|floatformat:2 }} RON</h3>
+                                <small>Luna curentă</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h3><i class="bi bi-graph-up"></i></h3>
+                                <h5>Buget Rămas</h5>
+                                <h3>{{ budget_remaining|floatformat:2 }} RON</h3>
+                                <small>Din {{ budget|floatformat:2 }} RON</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Cheltuieli pe Categorii</h5>
+                <div class="btn-group">
+                  <a href="?range=week" class="btn btn-sm {% if range_filter == 'week' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Săptămâna</a>
+                  <a href="?range=month" class="btn btn-sm {% if range_filter == 'month' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Luna</a>
+                  <a href="?range=year" class="btn btn-sm {% if range_filter == 'year' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Anul</a>
+               </div>
+            </div>
+            <div class="card-body">
+                <canvas id="expenseChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Activitate Recentă</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for transaction in recent_transactions %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                {% if transaction.type == 'expense' %}
+                                    <i class="bi bi-cart text-danger"></i>
+                                    <span class="ms-2">{{ transaction.description|default:transaction.category }}</span>
+                                {% else %}
+                                    <i class="bi bi-briefcase text-success"></i>
+                                    <span class="ms-2">{{ transaction.description|default:"Venit" }}</span>
+                                {% endif %}
+                                <small class="d-block text-muted">{{ transaction.date }}</small>
+                            </div>
+                            {% if transaction.type == 'expense' %}
+                                <span class="badge bg-danger rounded-pill">-{{ transaction.amount|floatformat:2 }} RON</span>
+                            {% else %}
+                                <span class="badge bg-success rounded-pill">+{{ transaction.amount|floatformat:2 }} RON</span>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center">Nu există tranzacții recente</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'expense-list' %}" class="btn btn-sm btn-outline-primary">Vezi toate tranzacțiile</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Acțiuni Rapide</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <a href="{% url 'expense-create' %}" class="btn btn-lg btn-outline-danger w-100">
+                            <i class="bi bi-plus-circle"></i><br>
+                            Adaugă Cheltuială
+                        </a>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <a href="{% url 'income-create' %}" class="btn btn-lg btn-outline-success w-100">
+                            <i class="bi bi-plus-circle"></i><br>
+                            Adaugă Venit
+                        </a>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <a href="{% url 'send-monthly-report' %}" class="btn btn-lg btn-outline-primary w-100">
+                            <i class="bi bi-file-earmark-text"></i><br>
+                            Generează Raport
+                        </a>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <a href="{% url 'category-list' %}" class="btn btn-lg btn-outline-info w-100">
+                            <i class="bi bi-tags"></i><br>
+                            Gestionează Categorii
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+
+
+        const categoryLabels = [
+            {% for category in expense_categories %}
+                "{{ category.category__name|default:'Fără Categorie' }}",
+            {% endfor %}
+        ];
+
+        const categoryData = [
+            {% for category in expense_categories %}
+                {{ category.total }},
+            {% endfor %}
+        ];
+
+
+        const backgroundColors = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e',
+            '#e74a3b', '#6f42c1', '#858796', '#5a5c69'
+        ];
+
+        const hoverBackgroundColors = [
+            '#2e59d9', '#17a673', '#2c9faf', '#dda20a',
+            '#be2617', '#5a30a0', '#60616f', '#373840'
+        ];
+
+
+        const expenseChart = new Chart(expenseCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryData,
+                    backgroundColor: backgroundColors.slice(0, categoryData.length),
+                    hoverBackgroundColor: hoverBackgroundColors.slice(0, categoryData.length),
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 12
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        displayColors: false,
+                        caretPadding: 10,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' RON';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%',
+            }
+        });
+    });
+</script>
+{% endblock %}

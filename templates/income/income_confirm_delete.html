@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Confirmare Ștergere</h5>
+            </div>
+            <div class="card-body">
+                <p>Ești sigur că dorești să ștergi acest venit?</p>
+                <p><strong>Sumă:</strong> {{ income.amount|floatformat:2 }} RON</p>
+                <p><strong>Data:</strong> {{ income.date }}</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'income-detail' income.id %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Anulează
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Confirmă Ștergerea
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

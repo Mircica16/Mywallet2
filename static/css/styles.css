@@ -1,0 +1,114 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+/* Dashboard Cards */
+.card-body h3 {
+    font-weight: bold;
+}
+
+.bg-success, .bg-danger, .bg-info, .bg-warning {
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-success::after, .bg-danger::after, .bg-info::after, .bg-warning::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+}
+
+/* Activity List */
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 1rem;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item i {
+    font-size: 1.2rem;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+}
+
+/* Quick Actions */
+.btn-outline-danger, .btn-outline-success, .btn-outline-primary, .btn-outline-info {
+    border-width: 2px;
+    padding: 1.5rem 0;
+    transition: all 0.3s;
+}
+
+.btn-outline-danger:hover, .btn-outline-success:hover, .btn-outline-primary:hover, .btn-outline-info:hover {
+    transform: scale(1.05);
+}
+
+.btn-outline-danger i, .btn-outline-success i, .btn-outline-primary i, .btn-outline-info i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+
+footer {
+    border-top: 1px solid #e9ecef;
+}
+
+
+@media (max-width: 768px) {
+    .row.mb-4 {
+        margin-bottom: 1rem !important;
+    }
+
+    .col-md-3, .col-md-4, .col-md-8 {
+        margin-bottom: 1rem;
+    }
+}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Detalii Venit</h5>
+                <div>
+                    <a href="{% url 'income-update' income.id %}" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil"></i> Editează
+                    </a>
+                    <a href="{% url 'income-delete' income.id %}" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i> Șterge
+                    </a>
+                    <a href="{% url 'income-list' %}" class="btn btn-sm btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Înapoi
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <th>Sumă:</th>
+                                <td class="text-success fw-bold">{{ income.amount|floatformat:2 }} RON</td>
+                            </tr>
+                            <tr>
+                                <th>Data:</th>
+                                <td>{{ income.date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Creat la:</th>
+                                <td>{{ income.created_at }}</td>
+                            </tr>
+                            <tr>
+                                <th>Actualizat la:</th>
+                                <td>{{ income.updated_at }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Descriere</h6>
+                            </div>
+                            <div class="card-body">
+                                {% if income.description %}
+                                    {{ income.description|linebreaks }}
+                                {% else %}
+                                    <p class="text-muted">Nicio descriere disponibilă</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

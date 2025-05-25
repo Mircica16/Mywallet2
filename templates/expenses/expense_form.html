@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{% if form.instance.id %}Editează{% else %}Adaugă{% endif %} Cheltuială</h5>
+                <a href="{% url 'expense-list' %}" class="btn btn-sm btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Înapoi
+                </a>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.amount.id_for_label }}" class="form-label">Sumă (RON)</label>
+                        {{ form.amount.errors }}
+                        <input type="number" name="{{ form.amount.name }}" id="{{ form.amount.id_for_label }}"
+                               class="form-control {% if form.amount.errors %}is-invalid{% endif %}"
+                               value="{{ form.amount.value|default:'' }}" step="0.01" min="0" required>
+                        {% if form.amount.help_text %}
+                            <small class="form-text text-muted">{{ form.amount.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.category.id_for_label }}" class="form-label">Categorie</label>
+                        {{ form.category.errors }}
+                        <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}"
+                                class="form-select {% if form.category.errors %}is-invalid{% endif %}">
+                            <option value="">Selectează o categorie</option>
+                            {% for choice in form.category.field.queryset %}
+                                <option value="{{ choice.id }}" {% if form.category.value|stringformat:"s" == choice.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ choice.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.category.help_text %}
+                            <small class="form-text text-muted">{{ form.category.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.date.id_for_label }}" class="form-label">Data</label>
+                        {{ form.date.errors }}
+                        <input type="date" name="{{ form.date.name }}" id="{{ form.date.id_for_label }}"
+                               class="form-control {% if form.date.errors %}is-invalid{% endif %}"
+                               value="{{ form.date.value|date:'Y-m-d'|default:'' }}" required>
+                        {% if form.date.help_text %}
+                            <small class="form-text text-muted">{{ form.date.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Descriere</label>
+                        {{ form.description.errors }}
+                        <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}"
+                                  class="form-control {% if form.description.errors %}is-invalid{% endif %}"
+                                  rows="3">{{ form.description.value|default:'' }}</textarea>
+                        {% if form.description.help_text %}
+                            <small class="form-text text-muted">{{ form.description.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Salvează
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

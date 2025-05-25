@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-warning border border-warning p-4 shadow-sm">
+        <h4><i class="bi bi-exclamation-triangle"></i> Confirmare ștergere</h4>
+        <p>Sigur dorești să ștergi această cheltuială de <strong>{{ object.amount }} RON</strong>?</p>
+        <ul>
+            <li><strong>Categorie:</strong> {{ object.category.name }}</li>
+            <li><strong>Data:</strong> {{ object.date }}</li>
+            <li><strong>Descriere:</strong> {{ object.description }}</li>
+        </ul>
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'expense-list' %}" class="btn btn-secondary">Renunță</a>
+            <button type="submit" class="btn btn-danger">Șterge</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

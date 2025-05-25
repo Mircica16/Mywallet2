@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Lista Venituri</h5>
+                <a href="{% url 'income-create' %}" class="btn btn-sm btn-success">
+                    <i class="bi bi-plus-circle"></i> Adaugă Venit
+                </a>
+            </div>
+            <div class="card-body">
+                {% if incomes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descriere</th>
+                                    <th>Sumă</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for income in incomes %}
+                                <tr>
+                                    <td>{{ income.date }}</td>
+                                    <td>{{ income.description|truncatechars:50|default:"-" }}</td>
+                                    <td class="text-success">{{ income.amount|floatformat:2 }} RON</td>
+                                    <td>
+                                        <a href="{% url 'income-detail' income.id %}" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{% url 'income-update' income.id %}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{% url 'income-delete' income.id %}" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Nu există venituri înregistrate.
+                        <a href="{% url 'income-create' %}" class="alert-link">Adaugă primul venit</a>.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
